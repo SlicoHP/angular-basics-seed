@@ -5,19 +5,20 @@ import { Donut } from '../../models/donut.model';
   selector: 'donut-list',
   template: `
     <div>
-      <donut-card [donut]="donuts[0]"></donut-card>
-      <donut-card [donut]="donuts[1]"></donut-card>
-      <donut-card [donut]="donuts[2]"></donut-card>
+      <ng-container *ngIf="donuts.length; else nothing">
+        <donut-card *ngFor="let donut of donuts" [donut]="donut"></donut-card>
+      </ng-container>
+      <ng-template #nothing>
+        <p>No Donuts here...</p>
+      </ng-template>
     </div>
   `,
-  styles: [
-   
-  ]
+  styles: [],
 })
 export class DonutListComponent implements OnInit {
-  donuts!: Donut[]
+  donuts!: Donut[];
 
-  constructor() { }
+  constructor() {}
 
   ngOnInit(): void {
     this.donuts = [
@@ -26,7 +27,7 @@ export class DonutListComponent implements OnInit {
         name: 'Just Chocolate',
         icon: 'just-chocolate',
         price: 119,
-        description: 'For the pure chocoholic.'
+        description: 'For the pure chocoholic.',
       },
       {
         id: '82uwj3',
@@ -34,17 +35,15 @@ export class DonutListComponent implements OnInit {
         icon: 'glazed-fudge',
         price: 129,
         promo: true,
-        description: 'Sticky perfection.'
+        description: 'Sticky perfection.',
       },
       {
         id: '823jeh',
         name: 'Caramel Swirl',
         icon: 'caramel-swirl',
         price: 232,
-        description: 'Chocolate drizzed.'
-      }
+        description: 'Chocolate drizzed.',
+      },
     ];
-
   }
-
 }
