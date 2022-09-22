@@ -6,15 +6,15 @@ import { Donut } from '../../models/donut.model';
   template: `
     <div>
       <ng-container *ngIf="donuts.length; else nothing">
-        <donut-card *ngFor="let donut of donuts; trackBy: trackById" [donut]="donut"></donut-card>
+        <donut-card
+          *ngFor="let donut of donuts; trackBy: trackById"
+          [donut]="donut"
+        ></donut-card>
+
+        <ng-template ngFor [ngForOf]="donuts" let-donut let-i="index">
+          <donut-card [donut]="donut"></donut-card>
+        </ng-template>
       </ng-container>
-      <div
-      [style.color]="e ? 'red' : 'blue'"
-       *ngFor="let donut of donuts; index as i; odd as o; even as e;">
-        {{i}}
-        {{o}}
-        {{e}}
-      </div>
       <ng-template #nothing>
         <p>No Donuts here...</p>
       </ng-template>
@@ -52,11 +52,9 @@ export class DonutListComponent implements OnInit {
         description: 'Chocolate drizzed.',
       },
     ];
-
- 
   }
 
-  trackById(index: Number, value: Donut){
+  trackById(index: Number, value: Donut) {
     return value.id;
   }
 }
