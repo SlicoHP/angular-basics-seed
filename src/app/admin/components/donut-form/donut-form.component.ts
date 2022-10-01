@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { Donut } from '../../models/donut.model';
 
 @Component({
   selector: 'donut-form',
@@ -7,7 +8,16 @@ import { NgForm } from '@angular/forms';
     <form class="donut-form" (ngSubmit)="handleSubmit(form)" #form="ngForm">
       <label>
         <span>Name</span>
-        <input type="text" name="name" class="input" required minlength="5" ngModel [ngModelOptions]="{updateOn: 'blur'}" #name="ngModel" />
+        <input
+          type="text"
+          name="name"
+          class="input"
+          required
+          minlength="5"
+          ngModel
+          [ngModelOptions]="{ updateOn: 'blur' }"
+          #name="ngModel"
+        />
         <ng-container *ngIf="name.invalid && name.touched">
           <div class="donut-form-error" *ngIf="name.errors?.required">
             Name is required.
@@ -20,22 +30,37 @@ import { NgForm } from '@angular/forms';
 
       <label>
         <span>Icon</span>
-        <select name="icon" class="input input--select" required ngModel #icon="ngModel">
-          <option *ngFor="let icon of icons" [ngValue]="icon">{{icon}}</option>
+        <select
+          name="icon"
+          class="input input--select"
+          required
+          ngModel
+          #icon="ngModel"
+        >
+          <option *ngFor="let icon of icons" [ngValue]="icon">
+            {{ icon }}
+          </option>
         </select>
         <ng-container *ngIf="icon.invalid && icon.touched">
           <div class="donut-form-error" *ngIf="icon.errors?.required">
-          Icon is required.
+            Icon is required.
           </div>
         </ng-container>
       </label>
 
       <label>
         <span>Price</span>
-        <input type="number" name="price" class="input" required ngModel #price="ngModel"/>
+        <input
+          type="number"
+          name="price"
+          class="input"
+          required
+          ngModel
+          #price="ngModel"
+        />
         <ng-container *ngIf="price.invalid && price.touched">
           <div class="donut-form-error" *ngIf="price.errors?.required">
-          Price is required.
+            Price is required.
           </div>
         </ng-container>
       </label>
@@ -58,16 +83,24 @@ import { NgForm } from '@angular/forms';
 
       <label>
         <span>Description</span>
-        <textarea name="description" class="input input--textarea" required ngModel #description="ngModel"></textarea>
+        <textarea
+          name="description"
+          class="input input--textarea"
+          required
+          ngModel
+          #description="ngModel"
+        ></textarea>
         <ng-container *ngIf="description.invalid && description.touched">
           <div class="donut-form-error" *ngIf="description.errors?.required">
-          Description is required.
+            Description is required.
           </div>
         </ng-container>
       </label>
 
       <button type="submit" class="btn btn--green">Create</button>
-      <button type="button" class="btn btn--grey" (click)="form.resetForm()">Reset form</button>
+      <button type="button" class="btn btn--grey" (click)="form.resetForm()">
+        Reset form
+      </button>
 
       <div class="donut-form-working" *ngIf="form.valid && form.submitted">
         Working...
@@ -93,12 +126,12 @@ import { NgForm } from '@angular/forms';
             }
           }
         }
-        &-working{
+        &-working {
           font-size: 12px;
           font-style: italic;
           margin: 10px 0;
         }
-        &-error{
+        &-error {
           font-size: 12px;
           color: #e66262;
         }
@@ -107,6 +140,7 @@ import { NgForm } from '@angular/forms';
   ],
 })
 export class DonutFormComponent {
+  @Output() create = new EventEmitter<Donut>();
 
   icons: string[] = [
     'caramel-swirl',
@@ -115,15 +149,15 @@ export class DonutFormComponent {
     'sour-supreme',
     'strawberry-glaze',
     'vanilla-sundae',
-    'zesty-lemon'
-  ]
+    'zesty-lemon',
+  ];
 
   constructor() {}
 
-  handleSubmit(form: NgForm){
-    if(form.valid){
-      console.log(form.value)
-    }else{
+  handleSubmit(form: NgForm) {
+    if (form.valid) {
+      this.create.emit(form.value);
+    } else {
       form.form.markAllAsTouched();
     }
   }
